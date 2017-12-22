@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Top 2000</string>
+    <string name="category_database">Playlist</string>
+    <string name="category_users">Favorites</string>
+</resources>
