@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,13 +25,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CurrentUser extends Fragment {
+public class CurrentUserFragment extends Fragment {
     private FirebaseUser user;
-    public ArrayList<MusicClass> usersFavorites = new ArrayList<>();
+    private ArrayList<MusicClass> items = new ArrayList<>();
     private String userid;
 
     // Required empty public constructor
-    public CurrentUser() {}
+    public CurrentUserFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class CurrentUser extends Fragment {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         updateUI(rootView);
+        //makeListView(items);
 
         return rootView;
     }
@@ -103,17 +105,18 @@ public class CurrentUser extends Fragment {
                 String email = dataSnapshot.child("email").getValue().toString();
 
                 // Fetch the favorites and put them in a HashMap
-                DataSnapshot favoriteskeyvalue = dataSnapshot.child("favorites");
+                DataSnapshot favs = dataSnapshot.child("favorites");
                 HashMap<String, MusicClass> favorites = new HashMap<>();
 
-                for (DataSnapshot shot: favoriteskeyvalue.getChildren()){
-                    MusicClass character = shot.getValue(MusicClass.class);
-                    favorites.put(character.getRank().toString(), character);
+                for (DataSnapshot shot: favs.getChildren()){
+                    MusicClass newTrack = shot.getValue(MusicClass.class);
+                    items.add(newTrack);
                 }
 
                 // Use the user class to set the appropriate text views
                 UserClass user = new UserClass(userid, username, favorites, email);
                 setUserViews(user);
+                makeListView(items);
             }
 
             @Override
@@ -137,15 +140,6 @@ public class CurrentUser extends Fragment {
 
         TextView useridLogged = getView().findViewById(R.id.idCurrent);
         useridLogged.setText(userid);
-
-        // Convert the HashMap into an Arraylist
-        HashMap<String, MusicClass> favorites = user.favorites;
-        if (favorites.size() != 0){
-            for (MusicClass value: favorites.values()){
-                usersFavorites.add(value);
-            }
-            makeListView(usersFavorites);
-        }
     }
 
     /**
@@ -154,8 +148,8 @@ public class CurrentUser extends Fragment {
     public void makeListView(ArrayList<MusicClass> item) {
         Context context = getActivity();
         MyAdapter adapter;
-        ListView view = getView().findViewById(R.id.favoritesCurrent);
+        ListView listView = getView().findViewById(R.id.favoritesCurrent);
         adapter = new MyAdapter(context, item);
-        view.setAdapter(adapter);
+        listView.setAdapter(adapter);
     }
 }

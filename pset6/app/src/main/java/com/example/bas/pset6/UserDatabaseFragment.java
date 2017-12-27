@@ -2,7 +2,6 @@ package com.example.bas.pset6;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,15 +23,13 @@ import java.util.HashMap;
 /**
  * Creates a listview of all the usernames (out of firebase) of the users
  */
-public class UserDatabase extends Fragment {
+public class UserDatabaseFragment extends android.support.v4.app.Fragment {
     private HashMap<String, String> nameAndID;
-    private HashMap<String,String> favorites;
     private ArrayList<UserClass> userDatabase = new ArrayList<UserClass>();
     private String id;
-    private String email;
 
     // Required empty public constructor
-    public UserDatabase() {}
+    public UserDatabaseFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,8 +62,8 @@ public class UserDatabase extends Fragment {
                     HashMap<String, MusicClass> favorites = new HashMap<>();
 
                     for (DataSnapshot x: favoriteskeyvalue.getChildren()){
-                        MusicClass example = x.getValue(MusicClass.class);
-                        favorites.put(example.getRank().toString(), example);
+                        MusicClass requestedValue = x.getValue(MusicClass.class);
+                        favorites.put(requestedValue.getRank().toString(), requestedValue);
                     }
 
                     // Create new instance of the user class and and it to the database
@@ -85,7 +82,7 @@ public class UserDatabase extends Fragment {
     }
 
     /**
-     * Creates listview from arraylist by first getting the needed information from the hasmap
+     * Creates listview from arraylist by first getting the needed information from the hashmap
      */
     public void makeListView(HashMap hashMap) {
         ArrayList<String> users = new ArrayList<String>(hashMap.keySet());
@@ -114,11 +111,8 @@ public class UserDatabase extends Fragment {
             for (int i = 0; i < userDatabase.size(); i++) {
                 if (userDatabase.get(i).username.toString().equals(username)){
                     id = userDatabase.get(i).id.toString();
-                    email = userDatabase.get(i).email.toString();
-                    favorites = userDatabase.get(i).favorites;
                 }
             }
-
             goToDetails(username);
         }
     }
@@ -129,10 +123,9 @@ public class UserDatabase extends Fragment {
     public void goToDetails(String username) {
         Context context = getActivity();
         Intent intent = new Intent(context, UserScreen.class);
-        intent.putExtra("username", username);
         intent.putExtra("id", id);
-        intent.putExtra("email", email);
-        intent.putExtra("favorites", favorites);
+        intent.putExtra("username", username);
+
         startActivity(intent);
     }
 }

@@ -20,14 +20,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * This adapter allows for the use of a customized listview,
  * in which the information of all tracks will be displayed.
  */
 public class MyAdapter extends ArrayAdapter<MusicClass> {
-    private ArrayList<MusicClass> items = new ArrayList<>();
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseDatabase fbdb;
     private DatabaseReference dbref;
@@ -44,23 +42,19 @@ public class MyAdapter extends ArrayAdapter<MusicClass> {
         MusicClass track = getItem(position);
         view = LayoutInflater.from(getContext()).inflate(R.layout.listview_layout, group, false);
 
-        final ImageView img = view.findViewById(R.id.albumView);
-        final TextView rankView = view.findViewById(R.id.rankView);
+        final TextView RankView     = view.findViewById(R.id.rankView);
+        final TextView TrackView    = view.findViewById(R.id.trackView);
+        final TextView ArtistView   = view.findViewById(R.id.artistView);
+        final TextView YearView     = view.findViewById(R.id.yearView);
         final ImageButton favButton = view.findViewById(R.id.favView);
 
-        String url = track.getImageURL();
+        final String url    = track.getImageURL();
+        final ImageView img = view.findViewById(R.id.albumView);
         Picasso.with(getContext()).load(url).into(img);
 
-        TextView RankView = view.findViewById(R.id.rankView);
         RankView.setText(track.getRank());
-
-        TextView TrackView = view.findViewById(R.id.trackView);
         TrackView.setText(track.getTrack());
-
-        TextView ArtistView = view.findViewById(R.id.artistView);
         ArtistView.setText(track.getArtist());
-
-        TextView YearView = view.findViewById(R.id.yearView);
         YearView.setText(track.getYear());
 
         /**
@@ -71,43 +65,22 @@ public class MyAdapter extends ArrayAdapter<MusicClass> {
             @Override
             public void onClick(View view) {
                 if (user != null) {
-                    fbdb = FirebaseDatabase.getInstance();
                     String userid = user.getUid();
+
+                    fbdb = FirebaseDatabase.getInstance();
                     dbref = fbdb.getReference("User/user/" + userid);
 
                     dbref.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            // Get the HashHamp with the already added favorites
-                            DataSnapshot value = dataSnapshot.child("favorites");
-                            HashMap<String, MusicClass> favorites = (HashMap<String, MusicClass>) value.getValue();
+                            // Get the values of the MusicClass at the clicked position
+                            String album  = url;
+                            String rank   = RankView.getText().toString();
+                            String title  = TrackView.getText().toString();
+                            String artist = ArtistView.getText().toString();
+                            String year   = YearView.getText().toString();
 
-                            // If there are no favorites yet, create a new empty HashMap to store them
-                            if (favorites == null) {
-                                favorites = new HashMap<>();
-                            }
-
-
-                            String rankM = rankView.getText().toString();
-
-                            String albumM  = new String();
-                            String trackM  = new String();
-                            String artistM = new String();
-                            String yearM   = new String();
-
-                            for (MusicClass M:items) {
-                                if (rankM.equals(M.getTrack())) {
-                                    albumM  = M.getTrack();
-                                    trackM  = M.getArtist();
-                                    artistM = M.getImageURL();
-                                    yearM   = M.getYear();
-                                    break;
-                                }
-                            }
-
-                            // Update the values of the favorites HashMap
-                            MusicClass character = new MusicClass(albumM, rankM, trackM, artistM, yearM);
-                            favorites.put(rankM, character);
+                            MusicClass newTrack = new MusicClass(album, rank, title, artist, year);
 
                             // Update the user database by adding the newly favorited track
                             String userid = user.getUid();
@@ -115,7 +88,8 @@ public class MyAdapter extends ArrayAdapter<MusicClass> {
                             dbref = fbdb.getReference("User");
 
                             try {
-                                dbref.child("user").child(userid).child("favorites").setValue(favorites);
+                                dbref.child("user").child(userid).child("favorites").child(rank).setValue(newTrack);
+                                notifyDataSetChanged();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -132,11 +106,11 @@ public class MyAdapter extends ArrayAdapter<MusicClass> {
                     Toast.makeText(getContext(), "Toegevoegd aan favorieten", Toast.LENGTH_SHORT).show();
                 } else {
                     // Warn the user that adding favorites when not logged in is not possible
-                    Toast.makeText(getContext(), "Favorieten toevoegen is niet mogelijk zonder login", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "U bent niet ingelogd", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
+        notifyDataSetChanged();
         return view;
     }
 

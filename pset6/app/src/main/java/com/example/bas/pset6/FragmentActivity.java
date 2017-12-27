@@ -2,7 +2,6 @@ package com.example.bas.pset6;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -45,14 +44,14 @@ public class FragmentActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new MyDatabase(), "Afspeellijst");
-        adapter.addFrag(new CurrentUser(), "Favorieten");
-        adapter.addFrag(new UserDatabase(), "Gebruikers");
+        adapter.addFrag(new MyDatabaseFragment(), "Afspeellijst");
+        adapter.addFrag(new CurrentUserFragment(), "Favorieten");
+        adapter.addFrag(new UserDatabaseFragment(), "Gebruikers");
         viewPager.setAdapter(adapter);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<android.support.v4.app.Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager manager) {
@@ -60,7 +59,7 @@ public class FragmentActivity extends AppCompatActivity {
         }
 
         @Override
-        public Fragment getItem(int position) {
+        public android.support.v4.app.Fragment getItem(int position) {
             return mFragmentList.get(position);
         }
 
@@ -69,7 +68,7 @@ public class FragmentActivity extends AppCompatActivity {
             return mFragmentList.size();
         }
 
-        public void addFrag(Fragment fragment, String title) {
+        public void addFrag(android.support.v4.app.Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }

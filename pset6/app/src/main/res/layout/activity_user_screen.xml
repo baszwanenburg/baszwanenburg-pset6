@@ -2,23 +2,50 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/colorDarkMode">
 
-    <TextView
-        android:id="@+id/nameView"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="10dp"
-        android:text="Persoonlijke gegevens"
-        android:textSize="20sp"/>
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="Username:" />
+
+        <TextView
+            android:id="@+id/nameView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Name"
+            android:gravity="center|left"
+            android:textSize="20sp"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="120dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:text="ID:" />
@@ -26,7 +53,8 @@
         <TextView
             android:id="@+id/idView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="User ID"/>
     </LinearLayout>
 
     <TextView

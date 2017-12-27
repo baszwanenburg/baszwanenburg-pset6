@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,14 +50,26 @@ public class LoginScreen extends AppCompatActivity {
         };
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.homeBar:
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+        }
+        return(super.onOptionsItemSelected(item));
+    }
+
     private class Click implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.loginButton:
                     try {
-                        EditText getEmail = findViewById(R.id.getUserEmail);
-                        EditText getPassword = findViewById(R.id.getUserPassword);
+                        Log.d(TAG, "0");
+
+                        EditText getEmail = findViewById(R.id.GetUserEmail);
+                        EditText getPassword = findViewById(R.id.GetUserPassword);
 
                         String email = getEmail.getText().toString();
                         String password = getPassword.getText().toString();

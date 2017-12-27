@@ -1,11 +1,12 @@
 package com.example.bas.pset6;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Contains the user information
  */
-public class UserClass {
+public class UserClass implements Serializable {
     public String id;
     public String username;
     public HashMap favorites;
