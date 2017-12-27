@@ -3,6 +3,7 @@ package com.example.bas.pset6;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Layout;
 import android.util.Log;
@@ -11,9 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,7 +46,6 @@ public class CurrentUserFragment extends Fragment {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         updateUI(rootView);
-        //makeListView(items);
 
         return rootView;
     }
@@ -48,17 +54,24 @@ public class CurrentUserFragment extends Fragment {
      * Updates the database UI on whether a user is logged in or not
      */
     public void updateUI(View rootView) {
+        TextView loginText = rootView.findViewById(R.id.loginText);
+        Button loginButton = rootView.findViewById(R.id.loginButton);
+
+        Button logoutButton = rootView.findViewById(R.id.logoutButton);
+        Button deleteButton = rootView.findViewById(R.id.deleteButton);
+        LinearLayout linearLayout = rootView.findViewById(R.id.userInfoLayout);
+
         if (user == null) {
-            TextView loginText = rootView.findViewById(R.id.loginText);
-            Button loginButton = rootView.findViewById(R.id.loginButton);
-            loginText.setVisibility(View.VISIBLE);
-            loginButton.setVisibility(View.VISIBLE);
+            linearLayout.setVisibility(View.GONE);
+            logoutButton.setVisibility(View.GONE);
             loginButton.setOnClickListener(new click());
 
         } else {
-            Button logoutButton = rootView.findViewById(R.id.logoutButton);
-            logoutButton.setVisibility(View.VISIBLE);
+            loginText.setVisibility(View.GONE);
+            loginButton.setVisibility(View.GONE);
+
             logoutButton.setOnClickListener(new click());
+            deleteButton.setOnClickListener(new click());
 
             userid = user.getUid();
             getUserData();
@@ -70,20 +83,27 @@ public class CurrentUserFragment extends Fragment {
      */
     private class click implements View.OnClickListener {
         public void onClick(View view) {
+            Context context = getActivity();
             switch (view.getId()) {
                 case R.id.loginButton:
-                    Context context = getActivity();
-
                     Intent intentlogin = new Intent(context, LoginScreen.class);
                     startActivity(intentlogin);
                     break;
 
                 case R.id.logoutButton:
-                    Context context2 = getActivity();
-
                     FirebaseAuth.getInstance().signOut();
-                    Intent intent = new Intent(context2, LoginScreen.class);
-                    startActivity(intent);
+                    Intent intentLogout = new Intent(context, LoginScreen.class);
+                    startActivity(intentLogout);
+                    break;
+
+                case R.id.deleteButton:
+                    deleteUser();
+
+                    userid = user.getUid();
+                    FirebaseDatabase.getInstance().getReference("User").child("user").child(userid).removeValue();
+
+                    Intent intentDelete = new Intent(context, MainActivity.class);
+                    startActivity(intentDelete);
                     break;
             }
         }
@@ -151,5 +171,21 @@ public class CurrentUserFragment extends Fragment {
         ListView listView = getView().findViewById(R.id.favoritesCurrent);
         adapter = new MyAdapter(context, item);
         listView.setAdapter(adapter);
+    }
+
+    /**
+     * Permanently removes the current user from Firebase.
+     */
+    public void deleteUser() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getContext(), "Account verwijderd", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }

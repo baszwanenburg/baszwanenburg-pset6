@@ -5,10 +5,9 @@
     android:orientation="vertical"
     android:background="@color/colorDarkMode">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp">
         <TextView
             android:layout_width="275dp"
             android:layout_height="match_parent"
@@ -19,92 +18,113 @@
         <Button
             android:id="@+id/logoutButton"
             android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="10dp"
             android:background="@color/colorPrimary"
             android:text="uitloggen"
-            android:visibility="gone"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/loginText"
-            android:layout_width="275dp"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="U bent momenteel niet ingelogd."
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <Button
             android:id="@+id/loginButton"
             android:layout_width="100dp"
             android:layout_height="40dp"
-            android:layout_gravity="center|bottom"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="10dp"
             android:background="@color/colorPrimary"
             android:text="inloggen"
-            android:visibility="gone"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:text="Gebruikersnaam:" />
-
-        <TextView
-            android:id="@+id/nameCurrent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:text="ID:" />
-
-        <TextView
-            android:id="@+id/idCurrent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:text="E-mail:" />
-
-        <TextView
-            android:id="@+id/emailCurrent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+            android:visibility="visible"/>
+    </RelativeLayout>
 
     <TextView
+        android:id="@+id/loginText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:text="Favorieten"
-        android:textSize="17sp"/>
+        android:text="U bent momenteel niet ingelogd."
+        android:textSize="15dp"
+        android:visibility="visible"/>
 
-    <ListView
-        android:id="@+id/favoritesCurrent"
+    <LinearLayout
+        android:id="@+id/userInfoLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="Gebruikersnaam:" />
+
+            <TextView
+                android:id="@+id/nameCurrent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="ID:" />
+
+            <TextView
+                android:id="@+id/idCurrent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="E-mail:" />
+
+            <TextView
+                android:id="@+id/emailCurrent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Favorieten"
+                android:textSize="17sp"/>
+
+            <Button
+                android:id="@+id/deleteButton"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="10dp"
+                android:background="@color/colorDarkMode"
+                android:text="Account verwijderen"
+                android:textSize="10dp"
+                android:textColor="@color/colorPrimary"/>
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/favoritesCurrent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
 
 </LinearLayout>

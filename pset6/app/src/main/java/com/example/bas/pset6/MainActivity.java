@@ -10,9 +10,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 /**
- * Main screen, allows the user to go to the Login screen (if not logged in already) or browse the database.
+ * Main screen, allows the user to go to the Login screen
+ * (if not logged in already) or browse the database.
  */
 public class MainActivity extends AppCompatActivity {
+
+    /**
+     * Initializes buttons and sets listeners.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,16 +36,20 @@ public class MainActivity extends AppCompatActivity {
     private class Click implements View.OnClickListener {
         public void onClick(View view) {
             switch (view.getId()) {
+                // Go to the fragment activity, regardless of whether or not someone is logged in
                 case R.id.databaseButton:
                     goToMyDatabase();
                     break;
+
+                // Go to the login screen activity
                 case R.id.loginButton:
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     if (user == null) {
                         goToLoginScreen();
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "You are currently already logged in.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"You are currently " +
+                                "already logged in.", Toast.LENGTH_SHORT).show();
                     }
                     break;
             }

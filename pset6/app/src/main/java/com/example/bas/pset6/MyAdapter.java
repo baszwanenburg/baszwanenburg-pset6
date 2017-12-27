@@ -26,6 +26,7 @@ import java.util.ArrayList;
  * in which the information of all tracks will be displayed.
  */
 public class MyAdapter extends ArrayAdapter<MusicClass> {
+
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseDatabase fbdb;
     private DatabaseReference dbref;
@@ -39,17 +40,20 @@ public class MyAdapter extends ArrayAdapter<MusicClass> {
      */
     @Override
     public View getView(int position, View view, ViewGroup group) {
+        // Get the track's class at the current position
         MusicClass track = getItem(position);
-        view = LayoutInflater.from(getContext()).inflate(R.layout.listview_layout, group, false);
+        view = LayoutInflater.from(getContext())
+                .inflate(R.layout.listview_layout, group, false);
 
+        // Get the views and put the appropriate values in it
         final TextView RankView     = view.findViewById(R.id.rankView);
         final TextView TrackView    = view.findViewById(R.id.trackView);
         final TextView ArtistView   = view.findViewById(R.id.artistView);
         final TextView YearView     = view.findViewById(R.id.yearView);
         final ImageButton favButton = view.findViewById(R.id.favView);
+        final ImageView img         = view.findViewById(R.id.albumView);
 
-        final String url    = track.getImageURL();
-        final ImageView img = view.findViewById(R.id.albumView);
+        final String url            = track.getImageURL();
         Picasso.with(getContext()).load(url).into(img);
 
         RankView.setText(track.getRank());
@@ -88,7 +92,9 @@ public class MyAdapter extends ArrayAdapter<MusicClass> {
                             dbref = fbdb.getReference("User");
 
                             try {
-                                dbref.child("user").child(userid).child("favorites").child(rank).setValue(newTrack);
+                                dbref.child("user").child(userid).child("favorites").child(rank)
+                                        .setValue(newTrack);
+                                favButton.setImageResource(R.drawable.ic_check_black);
                                 notifyDataSetChanged();
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -103,10 +109,12 @@ public class MyAdapter extends ArrayAdapter<MusicClass> {
                     favButton.setBackgroundResource(R.drawable.ic_check);
 
                     // Let the user know that the item was added
-                    Toast.makeText(getContext(), "Toegevoegd aan favorieten", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),
+                            "Toegevoegd aan favorieten", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Warn the user that adding favorites when not logged in is not possible
-                    Toast.makeText(getContext(), "U bent niet ingelogd", Toast.LENGTH_SHORT).show();
+                    // Notify the user that adding favorites when not logged in is not possible
+                    Toast.makeText(getContext(),
+                            "U bent niet ingelogd", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -18,10 +18,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterScreen" />
-        <activity android:name=".LoginScreen" />
+        <activity
+            android:name=".RegisterScreen"
+            android:parentActivityName="com.example.bas.pset6.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.bas.pset6.MainActivity" />
+        </activity>
+        <activity
+            android:name=".LoginScreen"
+            android:parentActivityName="com.example.bas.pset6.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.bas.pset6.MainActivity" />
+        </activity>
+        <activity
+            android:name=".UserScreen"
+            android:parentActivityName="com.example.bas.pset6.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.bas.pset6.MainActivity" />
+        </activity>
         <activity android:name=".FragmentActivity" />
-        <activity android:name=".UserScreen"></activity>
     </application>
 
 </manifest>

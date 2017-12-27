@@ -24,6 +24,7 @@ import java.util.HashMap;
  * Creates a listview of all the usernames (out of firebase) of the users
  */
 public class UserDatabaseFragment extends android.support.v4.app.Fragment {
+
     private HashMap<String, String> nameAndID;
     private ArrayList<UserClass> userDatabase = new ArrayList<UserClass>();
     private String id;

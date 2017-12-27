@@ -2,10 +2,10 @@ package com.example.bas.pset6;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,12 +17,18 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * This activity allows the user to log in.
+ * Logged in users will be able to save data.
+ */
 public class LoginScreen extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private static final String TAG = "Firebase response:";
 
+    /**
+     * Creates the view, initializes buttons and makes sure no user is signed in.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,44 +36,40 @@ public class LoginScreen extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        // Set up home button (back to Main Activity)
+        Toolbar myChildToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(myChildToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        // Set up button listeners for logging in and the register screen
         Button login = findViewById(R.id.loginButton);
         Button register = findViewById(R.id.goToRegister);
         login.setOnClickListener(new Click());
         register.setOnClickListener(new Click());
 
+        // No user should be signed in on the login screen
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser currentUser = firebaseAuth.getCurrentUser();
                 if (currentUser != null) {
-                    // user is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in " + currentUser.getUid());
-                } else {
-                    // user is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                    mAuth.signOut();
                 }
             }
         };
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.homeBar:
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-        }
-        return(super.onOptionsItemSelected(item));
-    }
-
+    /**
+     * Handles all button clicks.
+     */
     private class Click implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
+                // Get email and password and try to log in with it
                 case R.id.loginButton:
                     try {
-                        Log.d(TAG, "0");
-
                         EditText getEmail = findViewById(R.id.GetUserEmail);
                         EditText getPassword = findViewById(R.id.GetUserPassword);
 
@@ -76,10 +78,12 @@ public class LoginScreen extends AppCompatActivity {
 
                         loginUser(email, password);
                     } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), "Ingevoerde gegevens onjuist", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),
+                                "Ingevoerde gegevens onjuist", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                     break;
+                // Go to the register screen activity
                 case R.id.goToRegister:
                     goToRegister();
                     break;
@@ -87,6 +91,9 @@ public class LoginScreen extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handles user login.
+     */
     public void loginUser(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -94,10 +101,12 @@ public class LoginScreen extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(LoginScreen.this, "Succesvol ingelogd", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginScreen.this,
+                                    "Succesvol ingelogd", Toast.LENGTH_SHORT).show();
                             updateUI(user);
                         } else {
-                            Toast.makeText(LoginScreen.this, "Authenticatie mislukt", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginScreen.this,
+                                    "Authenticatie mislukt", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -120,14 +129,17 @@ public class LoginScreen extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Updates the view based on whether or not the user is currently logged in.
+     */
     public void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
-            Toast.makeText(getApplicationContext(), "Succesvol ingelogd", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(LoginScreen.this, FragmentActivity.class);
             startActivity(intent);
             finish();
         } else {
-            Toast.makeText(getApplicationContext(), "Inloggen mislukt", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),
+                    "Inloggen mislukt", Toast.LENGTH_SHORT).show();
         }
     }
 }

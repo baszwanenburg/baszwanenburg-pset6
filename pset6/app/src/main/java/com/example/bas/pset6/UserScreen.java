@@ -1,11 +1,10 @@
 package com.example.bas.pset6;
 
-import android.content.Intent;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,6 +20,7 @@ import java.util.ArrayList;
  * Converts the user information to the UI
  */
 public class UserScreen extends AppCompatActivity {
+
     private ArrayList<MusicClass> items = new ArrayList<>();
 
     @Override
@@ -28,23 +28,19 @@ public class UserScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_screen);
 
+        // Set up home button (back to Main Activity)
+        Toolbar myChildToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(myChildToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        // Get the requested user from the intent
         Bundle intentextra = getIntent().getExtras();
         String username = intentextra.getString("username");
         String id = intentextra.getString("id");
 
         setViews(username, id);
         getUserData(id);
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.homeBar:
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-        }
-        return(super.onOptionsItemSelected(item));
     }
 
     /**
