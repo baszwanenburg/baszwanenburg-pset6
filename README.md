@@ -2,7 +2,11 @@
 In opdracht van de Universiteit van Amsterdam is deze app gemaakt voor het laatste deel van het AppStudio vak. Met deze app kan de 
 gebruiker de eerste 100 nummers van de originele Top 2000 doorzoeken, waarbij elk nummer wordt de positie, titel, artiest en jaar van 
 publicatie getoond. Met behulp van Firebase kan de gebruiker inloggen en zelf platen toevoegen aan persoonlijke favorieten. Deze favorieten
+<<<<<<< HEAD
 kunnen door andere gebruikers opgezocht worden. Voor het doorzoeken van de afspeellijst en de gebruikers is geen login vereist.
+=======
+kunnen door andere gebruikers opgezocht worden. Voor het doorzoeken van de afspeellijst is geen login vereist, voor het doorzoeken van de gebruikers wel.
+>>>>>>> 463884b6a83bba91ee0fec6415ec1b7ed1f91bd5
 
 ## Better Code Hub
 [![BCH compliance](https://bettercodehub.com/edge/badge/baszwanenburg/AppStudio?branch=master)](https://bettercodehub.com/)
@@ -14,6 +18,14 @@ kunnen door andere gebruikers opgezocht worden. Voor het doorzoeken van de afspe
 * Als de app gekilled wordt, dient het zich in dezelfde state weer te hervatten.Even if killed, the app should generally resume in the same state as before.
 * De code dient goed georganiseerd en gedocumenteerd te zijn.
 
+<<<<<<< HEAD
+=======
+## Screenshots
+![MainActivity](/doc/MainActivity.png)
+![MyDatabase](/doc/MyDatabase.png)
+![UserDatabase](/doc/UserDatabase.png)
+
+>>>>>>> 463884b6a83bba91ee0fec6415ec1b7ed1f91bd5
 ## Peer review
 * Er mist een button om uit te loggen
 * Res files die niet (langer) gebruikt worden, zijn niet verwijderd
